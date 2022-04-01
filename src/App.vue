@@ -1,32 +1,60 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <v-app>
+    <v-app-bar
+      app
+      color="primary"
+      dark
+    >
+      <div class="d-flex align-center">
+        <div>
+          <v-btn small text @click="drawer = !drawer">
+            <v-icon>
+              fas fa-bars
+            </v-icon>
+          </v-btn>
+
+        </div>
+        <div>
+          Sputter PM
+        </div>
+      </div>
+
+    </v-app-bar>
+    <v-navigation-drawer app v-model="drawer">
+      <v-list>
+        <v-list-item to="/">
+          <v-list-item-title>
+            Home
+          </v-list-item-title>
+        </v-list-item>
+        <v-list-item to="/PmManagerView">
+          <v-list-item-title>
+            스펙 관리
+          </v-list-item-title>
+        </v-list-item>
+        <v-list-item to="/PmSummaryView">
+          <v-list-item-title>
+            PM Summary
+          </v-list-item-title>
+        </v-list-item>
+      </v-list>
+
+    </v-navigation-drawer>
+
+    <v-main>
+      <router-view/>
+    </v-main>
+  </v-app>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script lang="ts">
+import Vue from 'vue';
 
-#nav {
-  padding: 30px;
+export default Vue.extend({
+  name: 'App',
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
-</style>
+  data: () => ({
+    drawer : false
+  }),
+});
+</script>
