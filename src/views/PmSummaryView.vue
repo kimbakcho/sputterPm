@@ -11,15 +11,16 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue"
+import {defineComponent} from "vue";
 import {FDCInputPortUseCase, FDCUseCase} from "@/Bis/FDC/Domain/UseCase/FDCInputPortUseCase";
-import VueApexCharts from 'vue-apexcharts'
-import {ApexOptions} from "apexcharts";
 import {FDCRealValueResDto} from "@/Bis/FDC/Dto/FDCRealValueResDto";
+import VueApexCharts from "vue3-apexcharts";
+import {ApexOptions} from "apexcharts";
 
-export default Vue.extend({
+export default defineComponent({
+  name: '',
   components:{
-    apexchart: VueApexCharts,
+    apexchart: VueApexCharts
   },
   data(){
     return {
@@ -61,15 +62,13 @@ export default Vue.extend({
           goals: goals
         })
       });
-       return {
-         name: 'current',
-         data: seriesDataList,
-       }
+      return {
+        name: 'current',
+        data: seriesDataList,
+      }
     }
   }
 })
+
 </script>
 
-<style scoped>
-
-</style>

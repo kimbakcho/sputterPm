@@ -1,41 +1,49 @@
 <template>
-  <v-dialog v-model="dialog" max-width="30vw">
-    <v-card>
-      <v-card-title>
+  <q-dialog v-model="dialog">
+    <q-card>
+      <div>
         스펙 입력
-      </v-card-title>
-      <v-card-text>
-        <v-text-field label="모듈이름" v-model="eqpPmInsertReqDto.eqpModuleId">
+      </div>
+      <q-card-section>
+        <q-input label="모듈이름" v-model="eqpPmInsertReqDto.eqpModuleId">
 
-        </v-text-field>
-        <v-text-field label="변수명" v-model="eqpPmInsertReqDto.paramName">
+        </q-input>
+        <q-input label="변수명" v-model="eqpPmInsertReqDto.paramName">
 
-        </v-text-field>
-        <v-text-field label="설비 ID" v-model="eqpPmInsertReqDto.eqpId">
+        </q-input>
+        <q-input label="설비 ID" v-model="eqpPmInsertReqDto.eqpId">
 
-        </v-text-field>
-        <v-text-field label="설비이름" v-model="eqpPmInsertReqDto.eqpName">
+        </q-input>
+        <q-input label="설비이름" v-model="eqpPmInsertReqDto.eqpName">
 
-        </v-text-field>
-      </v-card-text>
-      <v-card-actions>
-        <v-btn @click="add" :loading="loading">
+        </q-input>
+
+      </q-card-section>
+
+
+      <q-card-actions>
+        <q-btn @click="add" :loading="loading">
           추가
-        </v-btn>
-        <v-btn @click="close">
+        </q-btn>
+        <q-btn @click="close">
           닫기
-        </v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+        </q-btn>
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
 </template>
 
-<script lang="ts">
-import Vue from "vue"
-import {EqpPmInsertReqDto} from "@/Bis/EqpPm/Dto/EqpPmInsertReqDto";
-import {EqpPmInputPortUseCase, EqpPmUseCase} from "@/Bis/EqpPm/Domain/UseCase/EqpPmInputPortUseCase";
+<style scoped>
 
-const PmInsertDialog =  Vue.extend({
+</style>
+
+<script lang="ts">
+import {defineComponent} from "vue";
+import {EqpPmInsertReqDto} from "@/Bis/EqpPm/Dto/EqpPmInsertReqDto";
+import {EqpPmUseCase} from "@/Bis/EqpPm/Domain/UseCase/EqpPmInputPortUseCase";
+
+export default defineComponent({
+  name: '',
   data() {
     return {
       dialog: false,
@@ -62,11 +70,5 @@ const PmInsertDialog =  Vue.extend({
     }
   }
 })
-export type PmInsertDialogType = InstanceType<typeof PmInsertDialog>;
-export default  PmInsertDialog;
 
 </script>
-
-<style scoped>
-
-</style>

@@ -2,17 +2,17 @@ import {SpecsRepository} from "@/Bis/Specs/Domain/Repository/SpecsRepository";
 import {SpecsInsertReqDto} from "@/Bis/Specs/Dto/SpecsInsertReqDto";
 import {SpecsResDto} from "@/Bis/Specs/Dto/SpecsResDto";
 import axios from "axios";
-import Preference from "@/Bis/Preference/Preference";
+
 
 export default class SpecsRepositoryImpl implements SpecsRepository {
 
     async save(reqDto: SpecsInsertReqDto): Promise<SpecsResDto> {
-        const { data } = await axios.post(`${Preference.backEndBase}/specs`,reqDto)
+        const { data } = await axios.post(`/specs`,reqDto)
         return data;
     }
 
     async getSpecsForEqp(eqpPmIdx: number): Promise<SpecsResDto[]> {
-        const { data } = await axios.get(`${Preference.backEndBase}/specs`,{
+        const { data } = await axios.get(`/specs`,{
             params:{
                 "eqpPmIdx": eqpPmIdx
             }
@@ -21,7 +21,7 @@ export default class SpecsRepositoryImpl implements SpecsRepository {
     }
 
     async delete(idx: number): Promise<void> {
-        return await axios.delete(`${Preference.backEndBase}/specs`,{
+        return await axios.delete(`/specs`,{
             params:{
                 "idx": idx
             }

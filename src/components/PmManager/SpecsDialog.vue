@@ -1,72 +1,81 @@
 <template>
-  <v-dialog v-model="dialog" max-width="35vw">
-    <v-card>
-      <v-card-text>
-        <div class="pa-4">
-          <v-btn @click="addSpecs">
-            추가
-          </v-btn>
+
+  <q-dialog v-model="dialog">
+    <q-card>
+      <q-card-section>
+        <div>
+          <q-btn @click="addSpecs" label="추가" style="margin: 8px">
+
+          </q-btn>
         </div>
-        <v-data-table :headers="headers" :items="items" >
-          <template v-slot:item.remove="{ item }">
-            <v-btn @click="removeItem(item)">
-              <v-icon>
-                fas fa-trash
-              </v-icon>
-            </v-btn>
+        <q-table :columns="headers" :rows="items">
+          <template v-slot:body-cell-remove="props">
+            <q-btn @click="removeItem(props.row)" icon="fas fa-trash">
+
+            </q-btn>
 
           </template>
-        </v-data-table>
-      </v-card-text>
-    </v-card>
+        </q-table>
+      </q-card-section>
+
+    </q-card>
     <SpecInsertDialog ref="SpecInsertDialog" @addSpec="onAddSpec">
 
     </SpecInsertDialog>
-  </v-dialog>
+  </q-dialog>
+
 </template>
 
+
+
 <script lang="ts">
-import Vue, {VueConstructor} from "vue"
-import {EqpPmResDto} from "@/Bis/EqpPm/Dto/EqpPmResDto";
-import {DataTableHeader} from "vuetify";
+import {defineComponent, ref} from "vue";
+import SpecInsertDialog from "@/components/PmManager/SpecInsertDialog.vue";
 import {SpecsResDto} from "@/Bis/Specs/Dto/SpecsResDto";
 import {SpecsInputPortUseCase, SpecsUseCase} from "@/Bis/Specs/Domain/UseCase/SpecsInputPortUseCase";
-import SpecInsertDialog, {SpecInsertDialogType} from "@/components/PmManager/SpecInsertDialog.vue";
-const SpecsDialog = (Vue as VueConstructor<Vue & {
-  $refs:{
-    SpecInsertDialog: SpecInsertDialogType
-  }
-}>).extend({
+import {EqpPmResDto} from "@/Bis/EqpPm/Dto/EqpPmResDto";
+
+
+export default defineComponent({
   components:{
     SpecInsertDialog
+  },
+  setup(){
+    const SpecInsertDialog = ref(null) as any
+    return {
+      SpecInsertDialog
+    }
   },
   data(){
     return {
       dialog: false,
       headers: [
         {
-          text: "idx",
-          value: "idx"
+          name: "idx",
+          label: "idx",
+          field: "idx"
         },
         {
-          text: "spec",
-          value: "spec"
+          name: "spec",
+          label: "spec",
+          field: "spec"
         },
         {
-          text: "specName",
-          value: "specName"
+          name: "specName",
+          label: "specName",
+          field: "specName"
         },
         {
-          text: "remove",
-          value: "remove"
+          name: "remove",
+          label: "remove",
+          field: "remove"
         }
-      ] as DataTableHeader[],
+      ],
       items: [] as SpecsResDto[],
       specsInputPortUseCase: new SpecsUseCase() as SpecsInputPortUseCase,
       openItem: {} as EqpPmResDto
     }
   },
-
   methods:{
     open(item: EqpPmResDto) {
       this.openItem = item
@@ -74,7 +83,7 @@ const SpecsDialog = (Vue as VueConstructor<Vue & {
       this.dialog = true
     },
     addSpecs(){
-      this.$refs.SpecInsertDialog.open(this.openItem)
+      this.SpecInsertDialog.open(this.openItem)
     },
     onAddSpec(){
       this.loadSpecs();
@@ -83,16 +92,11 @@ const SpecsDialog = (Vue as VueConstructor<Vue & {
       this.items = await this.specsInputPortUseCase.getSpecsForEqp(this.openItem.idx)
     },
     async removeItem(item: EqpPmResDto) {
-        await this.specsInputPortUseCase.delete(item.idx)
-        await this.loadSpecs();
+      await this.specsInputPortUseCase.delete(item.idx)
+      await this.loadSpecs();
     }
 
   },
 })
-export default SpecsDialog;
-export type SpecsDialogType = InstanceType<typeof SpecsDialog>;
+
 </script>
-
-<style scoped>
-
-</style>

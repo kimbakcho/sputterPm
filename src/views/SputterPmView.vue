@@ -6,17 +6,16 @@
   </div>
 </template>
 
-<script lang="ts">
-import Vue from "vue"
-export default Vue.extend({
-
-
-})
-</script>
-
 <style scoped lang="sass">
 .header
-    display: flex
-
-
+  display: flex
 </style>
+
+<script lang="ts">
+import {defineComponent} from "vue";
+
+export default defineComponent({
+  name: ''
+})
+
+</script>

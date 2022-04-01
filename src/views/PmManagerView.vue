@@ -22,28 +22,43 @@
 </template>
 
 <script lang="ts">
-import Vue, {VueConstructor} from "vue"
-import PmInsertDialog, {PmInsertDialogType} from "@/components/PmManager/PmInsertDialog.vue";
-import PmMangerTable, {PmMangerTableType} from "@/components/PmManager/PmMangerTable.vue";
+import {defineComponent} from "vue";
+import PmMangerTable from "@/components/PmManager/PmMangerTable.vue";
+import PmInsertDialog from "@/components/PmManager/PmInsertDialog.vue";
+import { ref, onMounted } from 'vue'
 
-export default (Vue as VueConstructor< Vue & {
-  $refs:{
-    PmInsertDialog: PmInsertDialogType,
-    PmMangerTable: PmMangerTableType
-  }
-} >).extend({
+export default defineComponent({
+  name: '',
   components:{
     PmInsertDialog,PmMangerTable
   },
-  methods:{
-    openAddDialog(){
-      this.$refs.PmInsertDialog.open();
-    },
-    onAdd(){
-      this.$refs.PmMangerTable.loadItems();
+  setup(){
+
+    const PmMangerTable = ref(null) as any
+    const PmInsertDialog = ref(null) as any
+
+    onMounted(()=>[
+
+    ])
+
+    function openAddDialog(){
+      PmInsertDialog.value.loadItems()
+    }
+    function onAdd(){
+      PmMangerTable.value.open()
+    }
+
+    return {
+      PmMangerTable,
+      PmInsertDialog,
+      openAddDialog,
+      onAdd
+
     }
   }
+
 })
+
 </script>
 
 <style scoped lang="sass">
@@ -52,3 +67,4 @@ export default (Vue as VueConstructor< Vue & {
   justify-content: flex-end
   padding: 16px
 </style>
+

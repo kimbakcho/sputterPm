@@ -1,33 +1,32 @@
 <template>
-  <v-dialog v-model="dialog" max-width="30vw">
-    <v-card>
-      <v-card-text>
-        <v-text-field label="스펙 이름" v-model="specsInsertReqDto.specName">
+  <q-dialog v-model="dialog">
+    <q-card>
+      <q-input v-model="specsInsertReqDto.specName" label="스펙 이름"> </q-input>
+      <q-input v-model="specsInsertReqDto.spec" label="스펙 값"> </q-input>
+      <q-card-actions>
+        <q-btn @click="addSpecs" label="추가">
 
-        </v-text-field>
-        <v-text-field label="스펙 값" v-model="specsInsertReqDto.spec">
+        </q-btn>
+        <q-btn @click="dialog = !dialog" label="닫기">
 
-        </v-text-field>
-        <v-card-actions>
-          <v-btn @click="addSpecs">
-            추가
-          </v-btn>
-          <v-btn @click="dialog = !dialog">
-            닫기
-          </v-btn>
-        </v-card-actions>
-      </v-card-text>
-    </v-card>
+        </q-btn>
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
 
-  </v-dialog>
 </template>
 
+<style scoped>
+
+</style>
+
 <script lang="ts">
-import Vue from "vue"
+import {defineComponent} from "vue";
 import {EqpPmResDto} from "@/Bis/EqpPm/Dto/EqpPmResDto";
 import {SpecsInsertReqDto} from "@/Bis/Specs/Dto/SpecsInsertReqDto";
 import {SpecsInputPortUseCase, SpecsUseCase} from "@/Bis/Specs/Domain/UseCase/SpecsInputPortUseCase";
-const SpecInsertDialog =  Vue.extend({
+
+export default defineComponent({
   data(){
     return {
       dialog: false,
@@ -50,10 +49,6 @@ const SpecInsertDialog =  Vue.extend({
     }
   }
 })
-export default SpecInsertDialog;
-export type SpecInsertDialogType = InstanceType<typeof SpecInsertDialog>;
+
 </script>
 
-<style scoped>
-
-</style>

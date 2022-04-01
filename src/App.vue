@@ -1,60 +1,57 @@
 <template>
-  <v-app>
-    <v-app-bar
-      app
-      color="primary"
-      dark
-    >
-      <div class="d-flex align-center">
-        <div>
-          <v-btn small text @click="drawer = !drawer">
-            <v-icon>
-              fas fa-bars
-            </v-icon>
-          </v-btn>
+  <div>
+    <q-layout view="hHh lpR lFf">
 
-        </div>
-        <div>
-          Sputter PM
-        </div>
-      </div>
+      <q-header elevated class="bg-primary text-white" height-hint="98">
+        <q-toolbar>
+          <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
 
-    </v-app-bar>
-    <v-navigation-drawer app v-model="drawer">
-      <v-list>
-        <v-list-item to="/">
-          <v-list-item-title>
-            Home
-          </v-list-item-title>
-        </v-list-item>
-        <v-list-item to="/PmManagerView">
-          <v-list-item-title>
-            스펙 관리
-          </v-list-item-title>
-        </v-list-item>
-        <v-list-item to="/PmSummaryView">
-          <v-list-item-title>
-            PM Summary
-          </v-list-item-title>
-        </v-list-item>
-      </v-list>
+          <q-toolbar-title>
+            Sputter PM
+          </q-toolbar-title>
+        </q-toolbar>
 
-    </v-navigation-drawer>
+      </q-header>
 
-    <v-main>
-      <router-view/>
-    </v-main>
-  </v-app>
+      <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
+        <q-list>
+          <q-item to="/">
+            <q-item-section>Home</q-item-section>
+          </q-item>
+          <q-item to="/PmManagerView">
+            <q-item-section>스펙 관리</q-item-section>
+          </q-item>
+          <q-item to="/PmSummaryView">
+            <q-item-section>PM Summary</q-item-section>
+          </q-item>
+        </q-list>
+      </q-drawer>
+
+      <q-page-container>
+        <router-view />
+      </q-page-container>
+
+    </q-layout>
+  </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import {defineComponent} from "vue";
 
-export default Vue.extend({
-  name: 'App',
+export default defineComponent({
+  name: '',
+  data(){
+    return {
+      drawer: false,
+      leftDrawerOpen: true
+    }
+  },
+  methods:{
+    toggleLeftDrawer(){
+      this.leftDrawerOpen = !this.leftDrawerOpen;
+    }
+  }
+})
 
-  data: () => ({
-    drawer : false
-  }),
-});
 </script>
+
