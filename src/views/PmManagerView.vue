@@ -1,14 +1,14 @@
 <template>
   <div>
     <div class="headerAction">
-      <v-btn @click="openAddDialog">
-        <v-icon>
-          fas fa-plus
-        </v-icon>
+      <q-btn @click="openAddDialog">
+        <q-icon name="fas fa-plus">
+
+        </q-icon>
         <div>
           추가
         </div>
-      </v-btn>
+      </q-btn>
     </div>
     <div>
       <PmMangerTable ref="PmMangerTable">

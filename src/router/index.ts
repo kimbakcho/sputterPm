@@ -24,6 +24,16 @@ const routes: Array<RouteRecordRaw> = [
     path: '/PmSummaryView',
     name: 'PmSummaryView',
     component: () => import('../views/PmSummaryView.vue')
+  },
+  {
+    path: "/SputterEqpView",
+    name: "SputterEqpView",
+    component: () => import('../views/SputterEqpView.vue')
+  },
+  {
+    path:"/SputterBatchHistoryView",
+    name: "SputterBatchHistoryView",
+    component: () =>import('../views/SputterBatchHistoryView.vue')
   }
 ]
 

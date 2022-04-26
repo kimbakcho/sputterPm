@@ -5,12 +5,10 @@
       <q-header elevated class="bg-primary text-white" height-hint="98">
         <q-toolbar>
           <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
-
           <q-toolbar-title>
             Sputter PM
           </q-toolbar-title>
         </q-toolbar>
-
       </q-header>
 
       <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
@@ -23,6 +21,12 @@
           </q-item>
           <q-item to="/PmSummaryView">
             <q-item-section>PM Summary</q-item-section>
+          </q-item>
+          <q-item to="/SputterEqpView">
+            <q-item-section>SputterEqpList</q-item-section>
+          </q-item>
+          <q-item to="/SputterBatchHistoryView">
+            <q-item-section>Sputter 배치 히스토리</q-item-section>
           </q-item>
         </q-list>
       </q-drawer>
