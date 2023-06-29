@@ -28,6 +28,9 @@
           <q-item to="/SputterBatchHistoryView">
             <q-item-section>Sputter 배치 히스토리</q-item-section>
           </q-item>
+            <q-item to="/YieldView">
+                <q-item-section>수율 관리</q-item-section>
+            </q-item>
         </q-list>
       </q-drawer>
 

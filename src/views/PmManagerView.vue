@@ -42,7 +42,7 @@ export default defineComponent({
     ])
 
     function openAddDialog(){
-      PmInsertDialog.value.loadItems()
+      PmInsertDialog.value.open()
     }
     function onAdd(){
       PmMangerTable.value.open()

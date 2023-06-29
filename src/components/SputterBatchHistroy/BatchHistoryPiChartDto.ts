@@ -1,4 +1,5 @@
 export interface BatchHistoryPiChartDto {
     batchCount: number,
-    batchCountName: string
+    batchCountName: string,
+    rate: number
 }

@@ -50,15 +50,26 @@ export default defineComponent({
           }else {
             pieMap.set(key,{
               batchCount: 1,
-              batchCountName: `${x.waferCount}`
+              batchCountName: `${x.waferCount}`,
+              rate: 0
             })
           }
         })
+        let totalBatchCount = 0;
+        pieMap.forEach(x=>{
+          totalBatchCount += x.batchCount;
+        })
+        pieMap.forEach(x=>{
+          x.rate = Math.round((x.batchCount/totalBatchCount)*10000)/100;
+        })
+
         let keys = Array.from(pieMap.keys());
+        let labels  = keys.map(x=>{
+          return `${x} (${pieMap.get(x)!.rate} %)`
+        })
         let values = Array.from(pieMap.values());
-        console.log(keys)
         chartData.series = []
-        chartData.chartOptions.labels = keys
+        chartData.chartOptions.labels = labels
         values.forEach(x=>{
           chartData.series.push(x.batchCount)
         })

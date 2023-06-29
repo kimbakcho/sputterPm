@@ -34,6 +34,11 @@ const routes: Array<RouteRecordRaw> = [
     path:"/SputterBatchHistoryView",
     name: "SputterBatchHistoryView",
     component: () =>import('../views/SputterBatchHistoryView.vue')
+  },
+  {
+    path:"/YieldView",
+    name: "YieldView",
+    component: () =>import('../views/YieldView.vue')
   }
 ]
 
