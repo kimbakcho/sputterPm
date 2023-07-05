@@ -5,9 +5,12 @@ import axios from "axios";
 
 export default class YieldUseCase {
 
-    async getYieldInfos(pageable: Pageable): Promise<Page<YieldInfoResDto>>{
+    async getYieldInfos(filter: string,pageable: Pageable): Promise<Page<YieldInfoResDto>>{
         const { data }  = await axios.get(`yieldInfo`,{
-            params: pageable
+            params: {
+                ...pageable,
+                "filter": filter,
+            }
         })
         return data
     }

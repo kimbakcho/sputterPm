@@ -1,25 +1,33 @@
 <template>
-  <div>
-      <div>
-          <q-table title="life 수율" :rows="yieldInfos"
-                   :columns="columnMeta"
-                   v-model:pagination="pagination"
-                   :loading="loading"
-                   dense
-                   @request="onRequest">
-              <template v-slot:top-right>
-                  <q-btn
-                      color="primary"
-                      icon-right="archive"
-                      label="Export to csv"
-                      no-caps
-                      @click="exportTable"
-                  />
-              </template>
-          </q-table>
-      </div>
+    <div>
+        <div>
+            <q-table title="life 수율" :rows="yieldInfos"
+                     :columns="columnMeta"
+                     v-model:pagination="pagination"
+                     :loading="loading"
+                     :filter="filter"
+                     dense
+                     @request="onRequest">
 
-  </div>
+                <template v-slot:top-right>
+                    <q-btn
+                        color="primary"
+                        icon-right="archive"
+                        label="Export to csv"
+                        no-caps
+                        @click="exportTable"
+                    />
+                    <q-input borderless dense debounce="300" v-model="filter" placeholder="Search"
+                             style="margin-left: 16px">
+                        <template v-slot:append>
+                            <q-icon name="search"/>
+                        </template>
+                    </q-input>
+                </template>
+            </q-table>
+        </div>
+
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -43,12 +51,12 @@ const columnMeta = ref<Array<any>>([
     {
         name: "eqpName",
         label: '설비',
-        field: (row: any) => row.batchInfo.eqpName,
+        field: (row: any) => row.batchInfo ? row.batchInfo.eqpName : "",
     },
     {
         name: "life",
         label: "life",
-        field: (row: any) => row.batchInfo.life,
+        field: (row: any) => row.batchInfo ? row.batchInfo.life : "",
     },
     {
         name: "saveTime",
@@ -87,9 +95,9 @@ const columnMeta = ref<Array<any>>([
         field: "yield6",
     }
 ])
-
+const filter = ref('')
 const pagination = ref({
-    sortBy: 'desc',
+    sortBy: 'saveTime',
     descending: false,
     page: 1,
     rowsPerPage: 50,
@@ -97,32 +105,36 @@ const pagination = ref({
 })
 
 
-onMounted(async ()=>{
-    const pageYieldInfos = await yieldUseCase.getYieldInfos({
-        page: pagination.value.page -1,
-        size: pagination.value.rowsPerPage,
-        sort: "saveTime,desc"
-    })
+onMounted(async () => {
+    const pageYieldInfos = await yieldUseCase.getYieldInfos(filter.value,
+        {
+            page: pagination.value.page - 1,
+            size: pagination.value.rowsPerPage,
+            sort: "saveTime,desc"
+        })
     yieldInfos.value = pageYieldInfos.content
     pagination.value.rowsNumber = pageYieldInfos.totalElements
 })
 
-async function onRequest(props: any){
-    const { page, rowsPerPage, sortBy, descending } = props.pagination
+async function onRequest(props: any) {
+    const {page, rowsPerPage, sortBy, descending} = props.pagination
     loading.value = true
-
     let sortQuery = sortBy
-    if(!sortQuery){
+
+    if (!sortQuery) {
         sortQuery = "saveTime,desc"
-    }else {
-        sortQuery += (descending? ",desc" : ",asc")
+    } else {
+        sortQuery += (descending ? ",desc" : ",asc")
     }
 
-    const pageYieldInfos = await yieldUseCase.getYieldInfos({
-        page: page - 1,
-        size: rowsPerPage,
-        sort: sortQuery
-    })
+    const pageYieldInfos = await yieldUseCase.getYieldInfos(
+        filter.value,
+        {
+            page: page - 1,
+            size: rowsPerPage ? rowsPerPage : 9999999,
+            sort: sortQuery
+        }
+    )
     yieldInfos.value = pageYieldInfos.content
 
     pagination.value.page = page
@@ -133,7 +145,8 @@ async function onRequest(props: any){
 
     loading.value = false
 }
-function wrapCsvValue (val: any, formatFn: any| undefined, row: any| undefined) {
+
+function wrapCsvValue(val: any, formatFn: any | undefined, row: any | undefined) {
     let formatted = formatFn !== void 0
         ? formatFn(val, row)
         : val
@@ -153,29 +166,74 @@ function wrapCsvValue (val: any, formatFn: any| undefined, row: any| undefined) 
     return `"${formatted}"`
 }
 
-function exportTable () {
-    // naive encoding to csv format
-    const content = [columnMeta.value.map(col => wrapCsvValue(col.label,null,null))].concat(
-        yieldInfos.value.map(row => columnMeta.value.map(col => wrapCsvValue(
-            typeof col.field === 'function'
-                ? col.field(row)
-                : row[ col.field === void 0 ? col.name : col.field ],
-            col.format,
-            row
-        )).join(','))
-    ).join('\r\n')
-    console.log(content)
-    const status = exportFile(
-        'table-export.csv',
-        new Blob(["\ufeff"+content],{type: 'text/csv;charset=utf-8;'}),
-        {
-            mimeType:'text/csv'
+
+function jsonToCSV(json_data: any) {
+
+    // 1-1. json 데이터 취득
+    const json_array = json_data;
+    // 1-2. json데이터를 문자열(string)로 넣은 경우, JSON 배열 객체로 만들기 위해 아래 코드 사용
+    // const json_array = JSON.parse(json_data);
+
+
+    // 2. CSV 문자열 변수 선언: json을 csv로 변환한 문자열이 담길 변수
+    let csv_string = '';
+
+
+    // 3. 제목 추출: json_array의 첫번째 요소(객체)에서 제목(머릿글)으로 사용할 키값을 추출
+    const titles = Object.keys(json_array[0]);
+
+
+    // 4. CSV문자열에 제목 삽입: 각 제목은 컴마로 구분, 마지막 제목은 줄바꿈 추가
+    titles.forEach((title, index)=>{
+        csv_string += (index !== titles.length-1 ? `${title},` : `${title}\r\n`);
+    });
+
+
+    // 5. 내용 추출: json_array의 모든 요소를 순회하며 '내용' 추출
+    json_array.forEach((content: any, index: any)=>{
+
+        let row = ''; // 각 인덱스에 해당하는 '내용'을 담을 행
+
+        for(let title in content){ // for in 문은 객체의 키값만 추출하여 순회함.
+            // 행에 '내용' 할당: 각 내용 앞에 컴마를 삽입하여 구분, 첫번째 내용은 앞에 컴마X
+            row += (row === '' ? `${content[title]}` : `,${content[title]}`);
         }
 
+        // CSV 문자열에 '내용' 행 삽입: 뒤에 줄바꿈(\r\n) 추가, 마지막 행은 줄바꿈X
+        csv_string += (index !== json_array.length-1 ? `${row}\r\n`: `${row}`);
+    })
+
+    // 6. CSV 문자열 반환: 최종 결과물(string)
+    return csv_string;
+}
+
+function exportTable() {
+    // naive encoding to csv format
+    let tempCsv =  yieldInfos.value.map(x=>{
+        return {
+            lotId: x.batchInfo.lotId.replaceAll(",","/"),
+            eqpName: x.batchInfo.eqpName,
+            life: x.batchInfo.life,
+            saveTime: x.saveTime,
+            yield1: x.yield1,
+            yield2: x.yield2,
+            yield3: x.yield3,
+            yield4: x.yield4,
+            yield5: x.yield5,
+            yield6: x.yield6
+        }
+    })
+    const status = exportFile(
+        'table-export.csv',
+        new Blob(["\ufeff" + jsonToCSV(tempCsv)], {type: 'text/csv;charset=utf-8;'}),
+        {
+            mimeType: 'text/csv'
+        }
     )
 
 }
 </script>
 
-<style >
+<style>
 </style>
+
