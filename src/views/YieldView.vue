@@ -8,7 +8,13 @@
                      :filter="filter"
                      dense
                      @request="onRequest">
-
+                <template v-slot:body-cell-lotId="props">
+                    <q-td :props="props">
+                        <div :class="{error: isError(props.row)}">
+                            {{ props.row.lotId }}
+                        </div>
+                    </q-td>
+                </template>
                 <template v-slot:top-right>
                     <q-btn
                         color="primary"
@@ -17,6 +23,7 @@
                         no-caps
                         @click="exportTable"
                     />
+
                     <q-input borderless dense debounce="300" v-model="filter" placeholder="Search"
                              style="margin-left: 16px">
                         <template v-slot:append>
@@ -41,6 +48,16 @@ const yieldUseCase = new YieldUseCase();
 const yieldInfos = ref<Array<YieldInfoResDto>>([])
 
 const loading = ref(false)
+
+function isError(row: YieldInfoResDto){
+    console.log("isError")
+    if (row.batchInfo.lotId.indexOf(row.lotId) < 0) {
+        return true;
+    } else {
+        return false
+    }
+
+}
 
 const columnMeta = ref<Array<any>>([
     {
@@ -93,12 +110,17 @@ const columnMeta = ref<Array<any>>([
         name: "yield6",
         label: 'yield6',
         field: "yield6",
+    },
+    {
+        name: "batchLots",
+        label: "배치 Lot 정보",
+        field: (row: any) => row.batchInfo ? row.batchInfo.lotId : "",
     }
 ])
 const filter = ref('')
 const pagination = ref({
     sortBy: 'saveTime',
-    descending: false,
+    descending: true,
     page: 1,
     rowsPerPage: 50,
     rowsNumber: 0,
@@ -211,7 +233,7 @@ function exportTable() {
     // naive encoding to csv format
     let tempCsv =  yieldInfos.value.map(x=>{
         return {
-            lotId: x.batchInfo.lotId.replaceAll(",","/"),
+            lotId: x.lotId,
             eqpName: x.batchInfo.eqpName,
             life: x.batchInfo.life,
             saveTime: x.saveTime,
@@ -220,7 +242,8 @@ function exportTable() {
             yield3: x.yield3,
             yield4: x.yield4,
             yield5: x.yield5,
-            yield6: x.yield6
+            yield6: x.yield6,
+            batchLots: x.batchInfo.lotId.replaceAll(",","/")
         }
     })
     const status = exportFile(
@@ -235,5 +258,8 @@ function exportTable() {
 </script>
 
 <style>
+.error{
+    color: red;
+}
 </style>
 
