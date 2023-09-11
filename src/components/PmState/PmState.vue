@@ -47,7 +47,7 @@ const columns = ref<Array<any>>([
     },
     {
         name: "recycleN2",
-        label: "Recycle(N2 Blow)",
+        label: "Vacuum clean",
         required: true,
     }
 ])
@@ -89,7 +89,7 @@ function onRecycleN2(row: PmStateResDto, value: boolean){
     console.log(value)
     if (value){
         $q.dialog({
-            message:"RecycleN2을 하시겠습니까?"
+            message:"Vacuum clean을 하시겠습니까?"
         }).onOk(async ()=>{
             if(value){
                 row.recycleN2 = true

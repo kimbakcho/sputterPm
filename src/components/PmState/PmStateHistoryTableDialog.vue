@@ -1,6 +1,6 @@
 <template>
     <q-dialog ref="dialogRef" @hide="onDialogHide">
-        <q-card class="q-dialog-plugin">
+        <q-card class="q-dialog-plugin" style="width: 700px">
             <q-card-section>
                 <q-table :columns="columns"
                          ref="tableRef"
@@ -17,6 +17,16 @@
                                     {{ getPmTypeString(props.row) }}
                                 </div>
 
+                            </q-td>
+                            <q-td key="chamber1" :props="props">
+                                <div>
+                                    {{ props.row.chamber1 }}
+                                </div>
+                            </q-td>
+                            <q-td key="chamber2" :props="props">
+                                <div>
+                                    {{ props.row.chamber2 }}
+                                </div>
                             </q-td>
                             <q-td key="updateTime" :props="props">
                                 {{ props.row.updateTime }}
@@ -60,6 +70,12 @@ const columns = ref<Array<any>>([{
     name: "PMType",
     label: "PM종류"
 }, {
+    name: "chamber1",
+    label: "chamber1"
+}, {
+    name: "chamber2",
+    label: "chamber2"
+}, {
     name: "updateTime",
     label: "시간"
 }, {
@@ -80,9 +96,9 @@ const pagination = ref({
 const rows = ref<Array<PmStateHistoryResDto>>([])
 
 onMounted(() => {
-    setTimeout(()=>{
+    setTimeout(() => {
         tableRef.value.requestServerInteraction()
-    },100)
+    }, 100)
 
 })
 
@@ -118,17 +134,17 @@ function getPmTypeString(item: PmStateHistoryResDto) {
         return "정기 PM(세정품)"
     }
     if (item.recycleN2) {
-        return "Recycle(N2 Blow)"
+        return "Vacuum clean"
     }
 
 }
 
-async function onDelete(item: PmStateHistoryResDto){
+async function onDelete(item: PmStateHistoryResDto) {
     $q.dialog({
         message: "정말로 삭제 하시겠습니까?",
-        ok:"삭제",
-        cancel:"취소"
-    }).onOk(async ()=>{
+        ok: "삭제",
+        cancel: "취소"
+    }).onOk(async () => {
         await pmStateUseCase.deleteHistory(item.idx)
         tableRef.value.requestServerInteraction()
     })

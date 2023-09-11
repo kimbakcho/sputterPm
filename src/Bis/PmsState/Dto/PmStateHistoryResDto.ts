@@ -5,5 +5,7 @@ export interface PmStateHistoryResDto {
     eqp: SputterEqpResDto
     schedulePM: boolean
     recycleN2: boolean
+    chamber1: number
+    chamber2: number
     updateTime: string
 }

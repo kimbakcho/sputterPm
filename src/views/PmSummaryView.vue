@@ -60,11 +60,16 @@ function makeSeries(src: FDCRealValueResDto[]){
                 strokeColor: '#775DD0'
             }
         });
-        seriesDataList.push({
-            x: x.eqpName,
-            y: Number(x.value.toFixed(2)),
-            goals: goals
-        })
+        try{
+            seriesDataList.push({
+                x: x.eqpName,
+                y: Number(x.value.toFixed(2)),
+                goals: goals
+            })
+        }catch (e) {
+            console.log(e)
+        }
+
     });
     return {
         name: 'current',

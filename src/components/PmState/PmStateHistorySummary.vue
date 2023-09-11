@@ -68,7 +68,7 @@ const columns = ref<Array<any>>([
     },
     {
         name: "recycleN2_Count",
-        label: "Recycle(N2 Blow)",
+        label: "Vacuum clean",
         required: true,
     }
 ])
