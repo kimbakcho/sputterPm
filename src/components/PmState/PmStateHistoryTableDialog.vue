@@ -1,6 +1,6 @@
 <template>
     <q-dialog ref="dialogRef" @hide="onDialogHide">
-        <q-card class="q-dialog-plugin" style="width: 700px">
+        <q-card class="q-dialog-plugin" style="width: 1200px;min-width: 85vw">
             <q-card-section>
                 <q-table :columns="columns"
                          ref="tableRef"
@@ -28,8 +28,20 @@
                                     {{ props.row.chamber2 }}
                                 </div>
                             </q-td>
+
                             <q-td key="updateTime" :props="props">
                                 {{ props.row.updateTime }}
+                            </q-td>
+                            <q-td key="comment" :props="props">
+                                <div style="display: flex">
+                                    <q-input v-model="props.row.comment" label="comment" style="flex-grow: 1">
+
+                                    </q-input>
+                                    <q-btn icon="save" dense padding="0" flat @click=onUpdateComment(props.row)>
+
+                                    </q-btn>
+                                </div>
+
                             </q-td>
                             <q-td key="delete" :props="props">
                                 <q-btn label="삭제" dense color="primary" @click="onDelete(props.row)">
@@ -68,19 +80,27 @@ const $q = useQuasar()
 
 const columns = ref<Array<any>>([{
     name: "PMType",
-    label: "PM종류"
+    label: "PM종류",
+    style: "width: 100px"
 }, {
     name: "chamber1",
-    label: "chamber1"
+    label: "chamber1",
+    style: "width: 100px"
 }, {
     name: "chamber2",
-    label: "chamber2"
+    label: "chamber2",
+    style: "width: 100px"
 }, {
     name: "updateTime",
-    label: "시간"
-}, {
+    label: "시간",
+    style: "width: 100px"
+},{
+    name: "comment",
+    label: "comment"
+} ,{
     name: "delete",
-    label: "삭제"
+    label: "삭제",
+    style: "width: 100px"
 }])
 
 const loading = ref(false)
@@ -148,6 +168,24 @@ async function onDelete(item: PmStateHistoryResDto) {
         await pmStateUseCase.deleteHistory(item.idx)
         tableRef.value.requestServerInteraction()
     })
+}
+
+async function onUpdateComment(row: PmStateHistoryResDto) {
+    try{
+        await pmStateUseCase.updatePMstateComment({
+            id: row.idx,
+            comment: row.comment
+        })
+        $q.dialog({
+            message: "등록 되었습니다"
+        })
+    }catch (e) {
+        $q.dialog({
+            message:"에러가 발생 했습니다."
+        })
+        console.log(e)
+    }
+
 }
 </script>
 

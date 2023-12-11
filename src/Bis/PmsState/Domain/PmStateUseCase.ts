@@ -7,6 +7,7 @@ import {Page} from "@/Bis/Common/Page";
 import {Pageable} from "@/Bis/Common/Pageable";
 import {PmStateHistoryResDto} from "@/Bis/PmsState/Dto/PmStateHistoryResDto";
 import {PmStateHistorySummaryResDto} from "@/Bis/PmsState/Dto/PmStateHistorySummaryResDto";
+import {PmStateHistoryCommentUpdateReqDto} from "@/Bis/PmsState/Dto/PmStateHistoryCommentUpdateReqDto";
 
 export default class PmStateUseCase {
     async getCurrent(): Promise<Array<PmStateResDto>>{
@@ -42,5 +43,9 @@ export default class PmStateUseCase {
                 "idx": idx
             }
         })
+    }
+
+    async updatePMstateComment(reqDto: PmStateHistoryCommentUpdateReqDto){
+        await axios.post("/pmState/updateHistoryComment",reqDto)
     }
 }

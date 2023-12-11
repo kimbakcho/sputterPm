@@ -22,6 +22,7 @@
           v-model="searchData.eqpSelect"
           :options="searchData.eqpList"
           option-value="eqpId"
+          multiple
           option-label="eqpName">
 
       </q-select>
@@ -75,7 +76,7 @@ export default defineComponent({
     let batchHistoryTable = ref<InstanceType<typeof BatchHistoryTable>|null>(null)
     onMounted(async () => {
       await searchData.loadEqpList()
-      searchData.eqpSelect = searchData.eqpList[0]
+      searchData.eqpSelect = [searchData.eqpList[0]]
     })
     let sputterEqpUseCase = new SputterEqpUseCase();
     let wsLotSummaryUseCase = new WsLotSummaryUseCase();
@@ -89,11 +90,11 @@ export default defineComponent({
       async loadEqpList() {
         searchData.eqpList = await sputterEqpUseCase.getList();
       },
-      eqpSelect: {} as SputterEqpResDto,
+      eqpSelect: [] as Array<SputterEqpResDto>,
       async onSearch() {
         searchData.searchLoading = true;
         const data = await wsLotSummaryUseCase.getWsLotSummary({
-          eqpId: searchData.eqpSelect.eqpId,
+          eqpIds: searchData.eqpSelect.map(x=>x.eqpId),
           to: searchData.searchDate.to,
           from: searchData.searchDate.from
         })

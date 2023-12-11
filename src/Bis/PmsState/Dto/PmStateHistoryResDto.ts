@@ -8,4 +8,5 @@ export interface PmStateHistoryResDto {
     chamber1: number
     chamber2: number
     updateTime: string
+    comment: string
 }
