@@ -8,13 +8,73 @@
                      :filter="filter"
                      dense
                      @request="onRequest">
-                <template v-slot:body-cell-lotId="props">
-                    <q-td :props="props">
-                        <div :class="{error: isError(props.row)}">
-                            {{ props.row.lotId }}
-                        </div>
-                    </q-td>
+                <template v-slot:body="props" >
+                    <q-tr :props="props" :class="{isLowYield: isLowYield(props.row)}">
+                        <q-td key="lotId" :props="props">
+                            <div :class="{error: isError(props.row)}">
+                                {{ props.row.lotId }}
+                            </div>
+                        </q-td>
+                        <q-td key="eqpName" :props="props">
+                            <div>
+                                {{ props.row.batchInfo ? props.row.batchInfo.eqpName : "" }}
+                            </div>
+                        </q-td>
+                        <q-td key="life" :props="props">
+                            <div>
+                                {{ props.row.batchInfo ? props.row.batchInfo.life : "" }}
+                            </div>
+                        </q-td>
+                        <q-td key="saveTime" :props="props">
+                            <div>
+                                {{ props.row.saveTime }}
+                            </div>
+                        </q-td>
+                        <q-td key="yield1" :props="props">
+                            <div>
+                                {{ props.row.yield1 }}
+                            </div>
+                        </q-td>
+                        <q-td key="yield2" :props="props">
+                            <div>
+                                {{ props.row.yield2 }}
+                            </div>
+                        </q-td>
+                        <q-td key="yield3" :props="props">
+                            <div>
+                                {{ props.row.yield3 }}
+                            </div>
+                        </q-td>
+                        <q-td key="yield4" :props="props">
+                            <div>
+                                {{ props.row.yield4 }}
+                            </div>
+                        </q-td>
+                        <q-td key="yield5" :props="props">
+                            <div>
+                                {{ props.row.yield5 }}
+                            </div>
+                        </q-td>
+                        <q-td key="yield6" :props="props">
+                            <div>
+                                {{ props.row.yield6 }}
+                            </div>
+                        </q-td>
+                        <q-td key="batchLots" :props="props">
+                            <div>
+                                {{ props.row.batchInfo ? props.row.batchInfo.lotId : "" }}
+                            </div>
+                        </q-td>
+                    </q-tr>
+
                 </template>
+<!--                <template v-slot:body-cell-lotId="props">-->
+<!--                    <q-td :props="props">-->
+<!--                        <div :class="{error: isError(props.row)}">-->
+<!--                            {{ props.row.lotId }}-->
+<!--                        </div>-->
+<!--                    </q-td>-->
+<!--                </template>-->
                 <template v-slot:top-right>
                     <q-btn
                         color="primary"
@@ -56,6 +116,20 @@ function isError(row: YieldInfoResDto){
     } else {
         return false
     }
+
+}
+
+function isLowYield(row: YieldInfoResDto){
+    if((row.yield1 > 0 && row.yield1 < 0.93)
+        || (row.yield2 > 0 && row.yield2 < 0.93)
+        || (row.yield3 > 0 && row.yield3 < 0.93)
+        || (row.yield4 > 0 && row.yield4 < 0.93)
+        || (row.yield5 > 0 && row.yield5 < 0.93)
+        || (row.yield6 > 0 && row.yield6 < 0.93)
+    ){
+        return true
+    }
+    return false
 
 }
 
@@ -259,6 +333,9 @@ function exportTable() {
 
 <style>
 .error{
+    color: red;
+}
+.isLowYield{
     color: red;
 }
 </style>

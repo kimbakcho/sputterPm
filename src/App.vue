@@ -31,6 +31,12 @@
             <q-item to="/YieldView">
                 <q-item-section>수율 관리</q-item-section>
             </q-item>
+            <q-item style="cursor: pointer">
+                <q-item-section @click="goSite(`http://10.20.10.114/wfdc/sputterAnalysis/amsSputterTargetLife`)" >AMS Sputter Target Life 관리</q-item-section>
+            </q-item>
+            <q-item style="cursor: pointer">
+                <q-item-section @click="goSite(`http://10.20.10.114/wfdc/sputterAnalysis/sputterMro`)" >sputter MRO</q-item-section>
+            </q-item>
         </q-list>
       </q-drawer>
 
@@ -56,7 +62,10 @@ export default defineComponent({
   methods:{
     toggleLeftDrawer(){
       this.leftDrawerOpen = !this.leftDrawerOpen;
-    }
+    },
+      goSite(site: string){
+        window.open(site)
+      }
   }
 })
 

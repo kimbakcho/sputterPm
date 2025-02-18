@@ -17,7 +17,7 @@
 
           </q-btn>
       </div>
-    <q-table :rows="rows" :columns="columns" :hide-bottomt="true" dense flat hide-pagination style="width: 30vw">
+    <q-table :rows="rows" :columns="columns" :hide-bottomt="true" :pagination="{rowsPerPage: -1}" dense flat hide-pagination style="width: 30vw">
         <template v-slot:body="props" >
             <q-tr :props="props" @click="onSummaryHistory(props.row)">
                 <q-td key="eqpName" :props="props">
