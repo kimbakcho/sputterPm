@@ -37,6 +37,9 @@
             <q-item style="cursor: pointer">
                 <q-item-section @click="goSite(`http://10.20.10.114/wfdc/sputterAnalysis/sputterMro`)" >sputter MRO</q-item-section>
             </q-item>
+            <q-item style="cursor: pointer">
+                <q-item-section @click="goSite(`http://10.20.10.114/wfdc/sputterAnalysis/SIO2TargetLife`)" >SIO2 LifeTIme</q-item-section>
+            </q-item>
         </q-list>
       </q-drawer>
 
