@@ -5,6 +5,8 @@ export interface YieldInfoResDto {
         batchId: string
         lotId: string
         life: number
+        life2: number
+        life3: number
         updateTime: string
         moveOutTime: string
         eqpCode: string

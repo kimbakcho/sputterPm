@@ -25,6 +25,16 @@
                                 {{ props.row.batchInfo ? props.row.batchInfo.life : "" }}
                             </div>
                         </q-td>
+                      <q-td key="life2" :props="props">
+                        <div>
+                          {{ props.row.batchInfo ? props.row.batchInfo.life2 : "" }}
+                        </div>
+                      </q-td>
+                      <q-td key="life3" :props="props">
+                        <div>
+                          {{ props.row.batchInfo ? props.row.batchInfo.life3 : "" }}
+                        </div>
+                      </q-td>
                         <q-td key="saveTime" :props="props">
                             <div>
                                 {{ props.row.saveTime }}
@@ -149,6 +159,16 @@ const columnMeta = ref<Array<any>>([
         label: "life",
         field: (row: any) => row.batchInfo ? row.batchInfo.life : "",
     },
+  {
+    name: "life2",
+    label: "life2",
+    field: (row: any) => row.batchInfo ? row.batchInfo.life2 : "",
+  },
+  {
+    name: "life3",
+    label: "life3",
+    field: (row: any) => row.batchInfo ? row.batchInfo.life3 : "",
+  },
     {
         name: "saveTime",
         label: '저장 시간',
