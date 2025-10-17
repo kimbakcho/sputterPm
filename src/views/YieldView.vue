@@ -15,6 +15,11 @@
                                 {{ props.row.lotId }}
                             </div>
                         </q-td>
+                      <q-td key="materialId" :props="props">
+                        <div>
+                          {{ props.row.materialId }}
+                        </div>
+                      </q-td>
                         <q-td key="eqpName" :props="props">
                             <div>
                                 {{ props.row.batchInfo ? props.row.batchInfo.eqpName : "" }}
@@ -149,6 +154,11 @@ const columnMeta = ref<Array<any>>([
         label: 'lotId',
         field: "lotId",
     },
+  {
+    name: "materialId",
+    label: 'materialId',
+    field: "materialId",
+  },
     {
         name: "eqpName",
         label: '설비',

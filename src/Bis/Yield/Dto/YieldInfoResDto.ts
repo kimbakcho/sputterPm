@@ -20,4 +20,5 @@ export interface YieldInfoResDto {
     yield5: number
     yield6: number
     lotId: string
+    materialId: string
 }
