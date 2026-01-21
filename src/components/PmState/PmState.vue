@@ -20,6 +20,9 @@
                 <q-td key="recycleN2" :props="props">
                     <q-checkbox :model-value="props.row.recycleN2"  dense @update:modelValue="onRecycleN2(props.row,$event)"/>
                 </q-td>
+                <q-td key="vacuumClean2" :props="props">
+                    <q-checkbox :model-value="props.row.vacuumClean2"  dense @update:modelValue="onVacuumClean2(props.row,$event)"/>
+                </q-td>
             </q-tr>
         </template>
     </q-table>
@@ -47,7 +50,12 @@ const columns = ref<Array<any>>([
     },
     {
         name: "recycleN2",
-        label: "Vacuum clean",
+        label: "Vacuum clean 1",
+        required: true,
+    },
+    {
+        name: "vacuumClean2",
+        label: "Vacuum clean 2",
         required: true,
     }
 ])
@@ -69,10 +77,12 @@ function onSchedulePM(row: PmStateResDto,value: boolean){
             if(value){
                 row.schedulePM = true
                 row.recycleN2 = false
+                row.vacuumClean2 = false
                 rows.value = await pmStateUseCase.updatePM({
                     idx: row.idx,
                     schedulePM: row.schedulePM,
                     recycleN2: row.recycleN2,
+                    vacuumClean2: row.vacuumClean2,
                 })
             }else {
                 row.schedulePM = true
@@ -80,24 +90,23 @@ function onSchedulePM(row: PmStateResDto,value: boolean){
 
         })
     }
-
-
-
 }
 
 function onRecycleN2(row: PmStateResDto, value: boolean){
     console.log(value)
     if (value){
         $q.dialog({
-            message:"Vacuum clean을 하시겠습니까?"
+            message:"Vacuum clean 1을 하시겠습니까?"
         }).onOk(async ()=>{
             if(value){
                 row.recycleN2 = true
                 row.schedulePM = false
+                row.vacuumClean2 = false
                 rows.value = await pmStateUseCase.updatePM({
                     idx: row.idx,
                     schedulePM: row.schedulePM,
                     recycleN2: row.recycleN2,
+                    vacuumClean2: row.vacuumClean2,
                 })
             }else {
                 row.recycleN2 = true
@@ -105,7 +114,30 @@ function onRecycleN2(row: PmStateResDto, value: boolean){
 
         })
     }
+}
 
+function onVacuumClean2(row: PmStateResDto, value: boolean){
+    console.log(value)
+    if (value){
+        $q.dialog({
+            message:"Vacuum clean 2를 하시겠습니까?"
+        }).onOk(async ()=>{
+            if(value){
+                row.vacuumClean2 = true
+                row.schedulePM = false
+                row.recycleN2 = false
+                rows.value = await pmStateUseCase.updatePM({
+                    idx: row.idx,
+                    schedulePM: row.schedulePM,
+                    recycleN2: row.recycleN2,
+                    vacuumClean2: row.vacuumClean2,
+                })
+            }else {
+                row.vacuumClean2 = true
+            }
+
+        })
+    }
 }
 
 </script>

@@ -154,9 +154,11 @@ function getPmTypeString(item: PmStateHistoryResDto) {
         return "정기 PM(세정품)"
     }
     if (item.recycleN2) {
-        return "Vacuum clean"
+        return "Vacuum clean 1"
     }
-
+    if (item.vacuumClean2) {
+        return "Vacuum clean 2"
+    }
 }
 
 async function onDelete(item: PmStateHistoryResDto) {

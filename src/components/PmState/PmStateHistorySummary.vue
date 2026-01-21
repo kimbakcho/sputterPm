@@ -37,6 +37,9 @@
                 <q-td key="recycleN2_Count" :props="props">
                     {{props.row.recycleN2Count}}
                 </q-td>
+                <q-td key="vacuumClean2_Count" :props="props">
+                    {{props.row.vacuumClean2Count}}
+                </q-td>
             </q-tr>
         </template>
     </q-table>
@@ -68,7 +71,12 @@ const columns = ref<Array<any>>([
     },
     {
         name: "recycleN2_Count",
-        label: "Vacuum clean",
+        label: "Vacuum clean 1",
+        required: true,
+    },
+    {
+        name: "vacuumClean2_Count",
+        label: "Vacuum clean 2",
         required: true,
     }
 ])
